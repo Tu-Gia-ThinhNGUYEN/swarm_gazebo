@@ -1,0 +1,55 @@
+<launch>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    </include>
+
+
+	<!-- begin robot1 -->
+	<group ns="swarm1">
+        <!-- Convert xacro and put on parameter server -->
+        <param name="robot_description" command="$(find xacro)/xacro.py $(find swarm_descriptions)/urdf/swarm_model.xacro bodyframe:=swarm1 ns:=swarm1" />
+
+        <!-- Run the joint_state_publisher node to publish the joint state of the robot -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    	<!-- Run the robot_state_publisher node and publish tf  -->
+   		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        </node>
+
+        <!-- Spawn a robot into Gazebo
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" /> -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          	args="-urdf -model swarm1 -param robot_description -x 8.5 -y -1.5"/>
+	</group>
+	<!-- begin robot2 -->
+	<group ns="swarm2">
+        <!-- Convert xacro and put on parameter server -->
+        <param name="robot_description" command="$(find xacro)/xacro.py $(find swarm_descriptions)/urdf/swarm_model.xacro bodyframe:=swarm2 ns:=swarm2" />
+
+        <!-- Run the joint_state_publisher node to publish the joint state of the robot -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    	<!-- Run the robot_state_publisher node and publish tf  -->
+   		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        </node>
+
+        <!-- Spawn a robot into Gazebo 
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" /> -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          	args="-urdf -model swarm2 -param robot_description -x 7.5 -y -1.5"/> 
+	</group>
+    <!-- begin robot3 -->
+	<group ns="swarm3">
+        <!-- Convert xacro and put on parameter server -->
+        <param name="robot_description" command="$(find xacro)/xacro.py $(find swarm_descriptions)/urdf/swarm_model.xacro bodyframe:=swarm3 ns:=swarm3" />
+
+        <!-- Run the joint_state_publisher node to publish the joint state of the robot -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    	<!-- Run the robot_state_publisher node and publish tf  -->
+   		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        </node>
+
+        <!-- Spawn a robot into Gazebo 
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" /> -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          	args="-urdf -model swarm3 -param robot_description -x 9.5 -y -1.5"/>
+	</group>
+</launch>

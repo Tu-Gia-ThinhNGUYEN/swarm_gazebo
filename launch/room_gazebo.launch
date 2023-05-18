@@ -1,0 +1,76 @@
+<launch>
+
+    <!-- Set the parameters of the launch file -->
+    <arg name="world_name" value="$(find swarm_gazebo)/worlds/new_gazebo.world"/>
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+
+    <!-- Run the gazebo simulation environment -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+
+	<!-- ROBOT 1 -->
+	<group ns="sw1">
+        <!-- Convert xacro and put on parameter server -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find swarm_descriptions)/urdf/swarm_model.xacro bodyframe:=sw1 ns:=sw1" />
+
+        <!-- Run the joint_state_publisher node to publish the joint state of the robot -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    	<!-- Run the robot_state_publisher node and publish tf  -->
+   		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        <param name="publish_frequency" type="double" value="50.0" />
+	    <param name="tf_prefix" value="sw1" />
+        </node>
+
+        <!-- Spawn a robot into Gazebo
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" /> -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          	args="-urdf -model sw1 -param robot_description -x 4.0 -y 4.0"/>
+	</group>
+	<!-- ROBOT 2 -->
+	<group ns="sw2">
+        <!-- Convert xacro and put on parameter server -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find swarm_descriptions)/urdf/swarm_model.xacro bodyframe:=sw2 ns:=sw2" />
+
+        <!-- Run the joint_state_publisher node to publish the joint state of the robot -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    	<!-- Run the robot_state_publisher node and publish tf  -->
+   		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        <param name="publish_frequency" type="double" value="50.0" />
+	    <param name="tf_prefix" value="sw2" />
+        </node>
+
+        <!-- Spawn a robot into Gazebo 
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" /> -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          	args="-urdf -model sw2 -param robot_description -x 4.0 -y 4.5"/> 
+	</group>
+    <!-- ROBOT 3 -->
+	<group ns="sw3">
+        <!-- Convert xacro and put on parameter server -->
+        <param name="robot_description" command="$(find xacro)/xacro --inorder $(find swarm_descriptions)/urdf/swarm_model.xacro bodyframe:=sw3 ns:=sw3" />
+
+        <!-- Run the joint_state_publisher node to publish the joint state of the robot -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ></node> 
+    	<!-- Run the robot_state_publisher node and publish tf  -->
+   		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
+        <param name="publish_frequency" type="double" value="50.0" />
+	    <param name="tf_prefix" value="sw3" />
+        </node>
+
+        <!-- Spawn a robot into Gazebo 
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" /> -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          	args="-urdf -model sw3 -param robot_description -x 4.0 -y 3.5"/>
+	</group>
+</launch>

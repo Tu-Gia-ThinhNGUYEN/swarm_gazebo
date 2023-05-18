@@ -1,0 +1,30 @@
+<launch>
+
+    <!-- 设置launch文件的参数 -->
+    <arg name="world_name" value="$(find swarm_gazebo)/worlds/swarm_gazebo.world"/>
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+
+    <!-- 运行gazebo仿真环境 -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg world_name)" />
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+<!-- Convert xacro and put on parameter server -->
+        <param name="robot_description" command="$(find xacro)/xacro.py $(find swarm_descriptions)/urdf/swarm_model.xacro bodyframe:=swarm1 ns:=swarm1" />
+
+       
+
+        <!-- Spawn a robot into Gazebo
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robot" /> -->
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          	args="-urdf -model swarm1 -param robot_description -x 8.5 -y -1.5"/>
+</launch>
